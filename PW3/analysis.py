@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Load the heart disease dataset
 df = pd.read_csv("heart.csv")
 
 print("=== FIRST LOOK AT THE DATA ===")
@@ -12,13 +11,11 @@ print("\nDataset shape:", df.shape)
 print("\nMissing values:")
 print(df.isnull().sum())
 
-# 1. Describe the distributions
 columns = ["age", "chol", "trestbps", "thalach"]
 
 print("\n=== DESCRIPTIVE STATISTICS ===")
 print(df[columns].describe())
 
-# 2. Check normality
 print("\n=== NORMALITY TESTS ===")
 for column in columns:
     data = df[column].dropna()
@@ -32,14 +29,12 @@ for column in columns:
     else:
         print("  There is not enough evidence against normality.")
 
-# Plot histograms
 df[columns].hist(figsize=(10, 8), bins=20)
 plt.suptitle("Distributions of Heart Dataset Variables")
 plt.tight_layout()
 plt.savefig("distributions.png")
 plt.close()
 
-# 3. Compare maximum heart rate between target groups
 group0 = df[df["target"] == 0]["thalach"].dropna()
 group1 = df[df["target"] == 1]["thalach"].dropna()
 
@@ -59,7 +54,6 @@ if p_value < 0.05:
 else:
     print("There is no statistically significant difference.")
 
-# Boxplot
 plt.figure(figsize=(7, 5))
 plt.boxplot([group0, group1], tick_labels=["Target 0", "Target 1"])
 plt.ylabel("Maximum heart rate (thalach)")
@@ -68,7 +62,6 @@ plt.tight_layout()
 plt.savefig("thalach_comparison.png")
 plt.close()
 
-# 4. Relationship between age and maximum heart rate
 correlation, p_value = stats.pearsonr(df["age"], df["thalach"])
 
 print("\n=== AGE AND MAXIMUM HEART RATE ===")
@@ -85,7 +78,6 @@ plt.savefig("age_thalach.png")
 plt.close()
 
 print("\nAnalysis complete. Three plots have been saved.")
-# 5. Chemical exposure and cancer: correlation vs causation
 chem = pd.read_csv("chemicals_cancer.csv")
 
 print("\n=== CHEMICALS AND CANCER DATA ===")
@@ -99,11 +91,9 @@ for column in ["benzene", "cadmium", "pollution_index", "age"]:
     r, p = stats.pearsonr(chem[column], chem["malignancy"])
     print(f"{column}: correlation = {r:.3f}, p-value = {p:.5g}")
 
-# Correlation matrix
 print("\n=== CORRELATION MATRIX ===")
 print(chem.corr(numeric_only=True).round(3))
 
-# Scatter plots
 for column in ["benzene", "cadmium", "pollution_index", "age"]:
     plt.figure(figsize=(7, 5))
     plt.scatter(chem[column], chem["malignancy"], alpha=0.6)
@@ -115,7 +105,6 @@ for column in ["benzene", "cadmium", "pollution_index", "age"]:
     plt.close()
 
 print("\nChemical data analysis complete.")
-# 8. Confidence intervals for mean maximum heart rate
 
 print("\n=== 95% CONFIDENCE INTERVALS ===")
 
@@ -136,7 +125,6 @@ for label, group in [(0, group0), (1, group1)]:
         f"{confidence_interval[1]:.2f})"
     )
 
-# Plot means with 95% confidence intervals
 means = [group0.mean(), group1.mean()]
 intervals = []
 
@@ -168,7 +156,6 @@ plt.tight_layout()
 plt.savefig("thalach_confidence_intervals.png")
 plt.close()
 
-# 9. Bonus: balance of the target category
 
 print("\n=== TARGET CATEGORY BALANCE ===")
 
