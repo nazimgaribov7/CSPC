@@ -115,3 +115,70 @@ for column in ["benzene", "cadmium", "pollution_index", "age"]:
     plt.close()
 
 print("\nChemical data analysis complete.")
+# 8. Confidence intervals for mean maximum heart rate
+
+print("\n=== 95% CONFIDENCE INTERVALS ===")
+
+for label, group in [(0, group0), (1, group1)]:
+    mean = group.mean()
+    confidence_interval = stats.t.interval(
+        0.95,
+        df=len(group) - 1,
+        loc=mean,
+        scale=stats.sem(group)
+    )
+
+    print(f"Target {label}:")
+    print(f"  Mean = {mean:.2f}")
+    print(
+        f"  95% confidence interval = "
+        f"({confidence_interval[0]:.2f}, "
+        f"{confidence_interval[1]:.2f})"
+    )
+
+# Plot means with 95% confidence intervals
+means = [group0.mean(), group1.mean()]
+intervals = []
+
+for group in [group0, group1]:
+    ci = stats.t.interval(
+        0.95,
+        df=len(group) - 1,
+        loc=group.mean(),
+        scale=stats.sem(group)
+    )
+    intervals.append(ci)
+
+errors = [
+    [means[i] - intervals[i][0] for i in range(2)],
+    [intervals[i][1] - means[i] for i in range(2)]
+]
+
+plt.figure(figsize=(7, 5))
+plt.errorbar(
+    ["Target 0", "Target 1"],
+    means,
+    yerr=errors,
+    fmt="o",
+    capsize=6
+)
+plt.ylabel("Mean maximum heart rate (thalach)")
+plt.title("Mean Maximum Heart Rate with 95% Confidence Intervals")
+plt.tight_layout()
+plt.savefig("thalach_confidence_intervals.png")
+plt.close()
+
+# 9. Bonus: balance of the target category
+
+print("\n=== TARGET CATEGORY BALANCE ===")
+
+proportions = df["target"].value_counts(normalize=True).sort_index()
+print("Target proportions:")
+print(proportions)
+
+entropy = -sum(p * np.log2(p) for p in proportions if p > 0)
+print(f"Entropy = {entropy:.3f} bits")
+
+print(
+    "Maximum possible entropy for two equally balanced categories = 1 bit."
+)

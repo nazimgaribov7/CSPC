@@ -94,3 +94,66 @@ The chemicals dataset showed strong associations between malignancy and several 
 - `cadmium_malignancy.png` — Cadmium versus malignancy.
 - `pollution_index_malignancy.png` — Pollution index versus malignancy.
 - `age_malignancy.png` — Age versus malignancy.
+## 6. Distribution Shapes
+
+The histograms show the following patterns:
+
+- **Age:** The distribution is concentrated mainly around middle and older adulthood. It is not perfectly symmetric.
+- **Cholesterol (chol):** The distribution is right-skewed, with some unusually high values.
+- **Resting blood pressure (trestbps):** Most observations are concentrated around 120–140, with a tail towards higher values.
+- **Maximum heart rate (thalach):** Values are concentrated around 140–170, with a tail towards lower values.
+
+These visual observations agree with the normality tests, which rejected normality for all four variables at the 5% significance level.
+
+## 7. Uncertainty in Mean Maximum Heart Rate
+
+The means and 95% confidence intervals are:
+
+| Target group | Mean thalach | 95% confidence interval |
+|---|---:|---:|
+| Target 0 | 158.38 | (155.42, 161.34) |
+| Target 1 | 139.26 | (135.47, 143.05) |
+
+The intervals do not overlap. This agrees with the Welch t-test, which found a statistically significant difference between the groups (p < 0.001).
+
+The figure `thalach_confidence_intervals.png` displays the means and their 95% confidence intervals.
+
+## 8. Bonus: Predictability of the Target Category
+
+The proportions are:
+
+- Target 0: 54.1%
+- Target 1: 45.9%
+
+The entropy is 0.995 bits, close to the maximum of 1 bit for two categories. The classes are therefore nearly balanced. Always guessing the majority category would give an accuracy of only about 54.1%.
+
+## 9. Investigating the Chemical Mystery
+
+In the full dataset, the correlations with malignancy are:
+
+- Benzene: r = 0.385
+- Cadmium: r = 0.880
+- Pollution index: r = 0.895
+
+A naive analysis would therefore make cadmium look like the stronger candidate.
+
+However, cadmium and pollution index are extremely strongly correlated (r = 0.982). To investigate possible confounding, I restricted the analysis to observations with a pollution index between 40 and 60. This left 199 observations.
+
+Within this restricted group:
+
+- Benzene and malignancy: r = 0.702
+- Cadmium and malignancy: r = 0.316
+
+The association with benzene remains strong, while the association with cadmium becomes much weaker. This supports the interpretation that benzene is the intended causal chemical in this synthetic dataset, whereas cadmium appeared more strongly associated because it tracked the pollution index.
+
+This is evidence consistent with confounding, not mathematical proof of causation. Restricting the pollution range does not control every possible confounder, and causal conclusions depend on how the synthetic data were generated.
+
+## 10. Data Source and Method Limitations
+
+The heart disease dataset is the Cleveland heart disease dataset, associated with the UCI Machine Learning Repository and also distributed through Kaggle.
+
+The normality tests, Welch's t-test, and Pearson correlations quantify patterns in the observed data. Statistical significance does not by itself establish practical importance or causation. The chemical dataset is synthetic, so conclusions about its intended causal mechanism should not be generalised directly to real patients.
+
+References:
+- UCI Machine Learning Repository, Heart Disease dataset: https://archive.ics.uci.edu/dataset/45/heart+disease
+- Kaggle, Heart Disease dataset: https://www.kaggle.com/datasets
