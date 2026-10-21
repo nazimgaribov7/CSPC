@@ -2,16 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# Read titration data
+                     
 data = np.loadtxt("titration.csv", delimiter=",", skiprows=1)
 
 V = data[:, 0]
 pH = data[:, 1]
 
-# Calculate the slope of pH with respect to volume
+                                                  
 slope = np.gradient(pH, V)
 
-# Find the equivalence point
+                            
 index = np.argmax(slope)
 V_eq = V[index]
 
@@ -19,7 +19,7 @@ print("Equivalence point =", V_eq, "mL")
 print("Maximum slope =", slope[index])
 
 
-# Plot pH and its slope side by side
+                                    
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 axes[0].plot(V, pH, "o-")

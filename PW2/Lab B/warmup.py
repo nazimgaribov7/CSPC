@@ -2,7 +2,7 @@ import numpy as np
 from scipy.optimize import newton, minimize
 
 
-# Part 2A: Easy convex function
+                               
 def f(x):
     return (x - 3)**2 + 1
 
@@ -36,7 +36,7 @@ result = minimize(lambda x: f(x[0]), [0.0], method="SLSQP")
 print("SLSQP:", result.x[0])
 
 
-# Part 2B: Harder landscape
+                           
 def g(x):
     return x**4 - 3*x**2 + x + 5
 
